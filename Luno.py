@@ -138,3 +138,40 @@ class Luno:
         else:
             return 'error'
 
+    def post_limit_order(self, pair, type, volume, price, base_account_id=None, counter_account_id=None):
+        """
+        Create a new trade order.
+        Warning! Orders cannot be reversed once they have executed. Please ensure your program has been thoroughly tested before submitting orders.
+        If no base_account_id or counter_account_id are specified, your default base currency or counter currency account will be used. You can find your account IDs by calling the Balances API.
+        """
+        if pair is None:
+            return "pair is None and is a required field"
+
+        if type is None:
+            return "type is None and is a required field"
+
+        if volume is None:
+            return "volume is None and is a required field"
+        
+        if price is None:
+            return "price is None and is a required field"
+
+        data = {
+            'type': type,
+            'volumne': volume,
+            'price': price
+        }
+
+        if base_account_id is not None:
+            data['base_account_id'] = base_account_id
+        if counter_account_id is not None:
+            data['counter_account_id'] = counter_account_id
+
+        r = requests.post(build_api_call(self.base_url, None, 'postorder', ''),
+                          data=data, auth=HTTPBasicAuth(KEY, SECRET))
+
+        if r.status_code == 200:
+            return r.json()
+        else:
+            return 'error'
+
