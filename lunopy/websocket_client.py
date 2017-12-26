@@ -12,8 +12,6 @@ async def connect_websocket():
         await websocket.send(message)
 
         response = await websocket.recv()
-        print(response)
+        decoded_response = json.loads(response)
         
-
-if __name__ == '__main__':
-    asyncio.get_event_loop().run_until_complete(connect_websocket())
+        return decoded_response

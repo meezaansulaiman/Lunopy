@@ -1,16 +1,22 @@
 import requests
 from requests.auth import HTTPBasicAuth
-from config import KEY, SECRET, ACCOUNTID
 from utils.Helper import build_api_call, build_query_string
-
+from websocket_client import connect_websocket
+import asyncio
 
 class Luno:
 
     base_url = 'https://api.mybitx.com/api/1/'
 
-    def __init__(self):
+    def __init__(self, KEY, SECRET, ACCOUNTID):
         self.KEY = KEY
         self.SECRET = SECRET
+        self.self.SECRET = ACCOUNTID
+        
+
+    def get_ws_price(self, pair='XBTZAR'):
+        return asyncio.get_event_loop().run_until_complete(connect_websocket())
+
 
     def get_price(self, pair='XBTZAR'):
 
@@ -73,7 +79,7 @@ class Luno:
         Gets luno's account balance
         :return: 
         """
-        r = requests.get(build_api_call(self.base_url, None, 'balance', ''), auth=HTTPBasicAuth(KEY, SECRET))
+        r = requests.get(build_api_call(self.base_url, None, 'balance', ''), auth=HTTPBasicAuth(self.KEY, self.SECRET))
         if r.status_code == 200:
             return r.json()
         else:
@@ -91,7 +97,7 @@ class Luno:
         query_string = build_query_string(data)
 
         r = requests.get(build_api_call(self.base_url, ACCOUNTID, 'transactions', query_string),
-                         auth=HTTPBasicAuth(KEY, SECRET))
+                         auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
             return r.json()
@@ -107,7 +113,7 @@ class Luno:
         :return: 
         """
 
-        r = requests.get(build_api_call(self.base_url, ACCOUNTID, 'pending', ''), auth=HTTPBasicAuth(KEY, SECRET))
+        r = requests.get(build_api_call(self.base_url, ACCOUNTID, 'pending', ''), auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
             return r.json()
@@ -131,7 +137,7 @@ class Luno:
 
         query_string = build_query_string(data)
 
-        r = requests.get(build_api_call(self.base_url, ACCOUNTID, 'listorders', query_string), auth=HTTPBasicAuth(KEY, SECRET))
+        r = requests.get(build_api_call(self.base_url, ACCOUNTID, 'listorders', query_string), auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
             return r.json()
@@ -168,7 +174,7 @@ class Luno:
             data['counter_account_id'] = counter_account_id
 
         r = requests.post(build_api_call(self.base_url, None, 'postorder', ''),
-                          data=data, auth=HTTPBasicAuth(KEY, SECRET))
+                          data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
             return r.json()

@@ -1,4 +1,4 @@
-.idea/
-.ipynb_checkpoints/
-.vscode
+.vscode/
+LunoPy.egg-info/
 __pycache__/
+workspace.code-workspace
