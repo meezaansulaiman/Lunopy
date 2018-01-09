@@ -1,9 +1,8 @@
 import asyncio
 import websockets
-from config import KEY, SECRET
 import json
 
-async def connect_websocket():
+async def connect_websocket(KEY, SECRET):
 
     api_key = {'api_key_id': KEY, 'api_key_secret': SECRET}
     message = json.dumps(api_key)

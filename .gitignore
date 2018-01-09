@@ -2,3 +2,5 @@
 LunoPy.egg-info/
 __pycache__/
 workspace.code-workspace
+.idea/
+.ipynb*
