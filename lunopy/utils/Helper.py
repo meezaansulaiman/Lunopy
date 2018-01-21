@@ -11,6 +11,9 @@ def build_query_string(query_obj):
 
 
 def build_api_call(base_url, account_id, method, query_string):
+    if query_string is None:
+        query_string = ''
+
     if account_id is None:
         return '{0}/{1}{2}'.format(base_url, method, query_string)
     else:

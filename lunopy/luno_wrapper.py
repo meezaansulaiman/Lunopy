@@ -12,98 +12,6 @@ class Luno:
         self.KEY = KEY
         self.SECRET = SECRET
         self.ACCOUNTID = ACCOUNTID
-        
-
-    def get_ws_price(self, pair='XBTZAR'):
-        
-        return asyncio.get_event_loop().run_until_complete(connect_websocket(self.KEY, self.SECRET))
-
-
-    def get_price(self, pair='XBTZAR'):
-
-        """
-        Gets the price of bitcoin 
-        :param pair: eg. XBTZAR
-        :return: json
-        """
-        data = {'pair': pair}
-        query_string = build_query_string(data)
-
-        r = requests.get(build_api_call(self.base_url, None, 'ticker', query_string))
-        if r.status_code == 200:
-            return r.json()
-
-    def get_rolling_price(self, pair='XBTZAR'):
-        """
-        Gets the rolling price of bitcoin 
-        :param pair: eg. XBTZAR
-        :return: json
-        """
-
-        data = {'pair': pair}
-        query_string = build_query_string(data)
-
-        while True:
-            r = requests.get(build_api_call(self.base_url, None, 'ticker', query_string))
-            if r.status_code == 200:
-                print(r.json())
-
-    def get_orderbook(self, pair='XBTZAR'):
-        """
-        Gets the orderbook of bitcoin 
-        :param pair: eg. XBTZAR
-        :return: json
-        """
-
-        data = {'pair': pair}
-        query_string = build_query_string(data)
-
-        r = requests.get(build_api_call(self.base_url, None, 'orderbook', query_string))
-        if r.status_code == 200:
-            return r.json()
-    
-    def get_trades(self, pair='XBTZAR'):
-        """
-        Gets the recent trades per pair
-        :param pair: eg. XBTZAR
-        :return: 
-        """
-        data = {'pair': pair}
-        query_string = build_query_string(data)
-
-        r = requests.get(build_api_call(self.base_url, None, 'trades', query_string))
-        if r.status_code == 200:
-            return r.json()
-
-    def get_balance(self):
-        """
-        Gets luno's account balance
-        :return: 
-        """
-        r = requests.get(build_api_call(self.base_url, None, 'balance', ''), auth=HTTPBasicAuth(self.KEY, self.SECRET))
-        if r.status_code == 200:
-            return r.json()
-        else:
-            return 'error'
-
-    def get_account_transactions(self, min_row=0, max_row=100):
-        """
-        Gets luno's account transactions
-        :return: 
-        """
-        data = {
-            'min_row': min_row,
-            'max_row': max_row
-        }
-        query_string = build_query_string(data)
-
-        r = requests.get(build_api_call(self.base_url, self.ACCOUNTID, 'transactions', query_string),
-                         auth=HTTPBasicAuth(self.KEY, self.SECRET))
-
-        if r.status_code == 200:
-            return r.json()
-        else:
-            return 'error'
 
     # ---------------------------------------------------------------------------------------------------------------
     #    PENDING ORDERS
@@ -182,3 +90,84 @@ class Luno:
         else:
             return 'error'
 
+    def post_market_order(self, type, counter, base_volume, base_account_id=None, counter_account_id=None):
+        """
+        A market order executes immediately, and either buys as much bitcoin that can be bought for a set amount of fiat currency, or sells a set amount of bitcoin for as much fiat as possible.
+        
+        :param type: string  required - "BUY" to buy bitcoin, or "SELL" to sell bitcoin.
+        :param counter: string  required - if type is "BUY" For a "BUY" order: amount of local currency (e.g. ZAR, MYR) to spend as a decimal string in units of the local currency e.g. "100.50".
+        :param base_volume: required - if type is "SELL"  For a "SELL" order: amount of Bitcoin to sell as a decimal string in units of BTC e.g. "1.423".
+        :param base_account_id: string  optional - The base currency account to use in the trade.
+        :param counter_account_id: string  optional - The counter currency account to use in the trade.
+        :return: 
+        """
+
+        if type is None:
+            return "Type is None and is a required field"
+
+        if counter is None:
+            return "Counter is None and is a required field"
+
+        if base_volume is None:
+            return "Base Volume is None and is a required field"
+
+        data = {
+            'type': type,
+            'counter': counter,
+            'base_volume': base_volume
+        }
+
+        if base_account_id is not None:
+            data['base_account_id'] = base_account_id
+
+        if counter_account_id is not None:
+            data['counter_account_id'] = counter_account_id
+
+        r = requests.post(build_api_call(self.base_url, None, 'marketorder', ''),
+                          data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
+
+        if r.status_code == 200:
+            return r.json()
+        else:
+            return 'error'
+
+    def stop_order(self, order_id):
+        """
+        Request to stop an order.
+
+        :param order_id: string - The order reference as a string e.g. BXMC2CJ7HNB88U4
+        :return: 
+        """
+
+        data = {
+            'order_id':order_id
+        }
+
+        r = requests.post(build_api_call(self.base_url, None, 'stoporder', ''),
+                          data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
+
+        if r.status_code == 200:
+            return r.json()
+        else:
+            return 'error'
+
+
+    def get_order(self, order_id):
+        """
+        Get an order by its id.
+
+        :param order_id: string - The order ID
+        :return: 
+        """
+        data = {
+            'order_id': order_id
+        }
+
+        r = requests.post(build_api_call(self.base_url, None, 'orders', ''),
+                          data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
+
+        if r.status_code == 200:
+            return r.json()
+        else:
+            return 'error'
+    
