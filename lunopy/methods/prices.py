@@ -1,4 +1,4 @@
-from config import BASEURL
+from . import BASEURL
 import requests
 from requests.auth import HTTPBasicAuth
 from lunopy.utils import build_api_call, build_query_string, Helper

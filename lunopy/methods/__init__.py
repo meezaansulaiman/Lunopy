@@ -1,8 +1,9 @@
 import lunopy.utils as utils
-import lunopy.websocket_client as websocket
 
+BASEURL = 'https://api.mybitx.com/api/1'
+
+from .accounts import Accounts
+from .orders import Orders
 from .prices import Prices
 from .trades import Trades
-from .accounts import Accounts
 from .transactions import Transactions
-# from .balances import Balances

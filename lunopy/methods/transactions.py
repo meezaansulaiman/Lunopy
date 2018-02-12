@@ -1,4 +1,4 @@
-from config import BASEURL
+from . import BASEURL
 import requests
 from requests.auth import HTTPBasicAuth
 from lunopy.utils import build_api_call, build_query_string, Helper
@@ -33,3 +33,22 @@ class Transactions:
             return r.json()
         else:
             return 'error'
+    
+
+    def get_pending_orders(self):
+        """
+        Gets pending orders placed
+        
+        Returns:
+            [type] -- [description]
+        """
+
+        r = requests.get(build_api_call(self.base_url, self.ACCOUNTID, 'pending', ''), auth=HTTPBasicAuth(self.KEY, self.SECRET))
+
+        if r.status_code == 200:
+            return r.json()
+        else:
+            return 'error'
+
+
+            

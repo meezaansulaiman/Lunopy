@@ -1,10 +1,9 @@
-from config import BASEURL
 import requests
 from requests.auth import HTTPBasicAuth
 from lunopy.utils import build_api_call, build_query_string, Helper
 from lunopy.websocket_client import connect_websocket
 import asyncio
-
+from . import BASEURL
 
 class Accounts:
     def __init__(self, key, secret, accountid):
