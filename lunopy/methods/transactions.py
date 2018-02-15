@@ -43,7 +43,7 @@ class Transactions:
             [type] -- [description]
         """
 
-        r = requests.get(build_api_call(self.base_url, self.ACCOUNTID, 'pending', ''), auth=HTTPBasicAuth(self.KEY, self.SECRET))
+        r = requests.get(build_api_call(BASEURL, self.ACCOUNTID, 'pending', ''), auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
             return r.json()

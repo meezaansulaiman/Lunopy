@@ -25,7 +25,7 @@ class Orders:
 
         query_string = build_query_string(data)
 
-        r = requests.get(build_api_call(self.base_url, None, 'listorders', query_string), auth=HTTPBasicAuth(self.KEY, self.SECRET))
+        r = requests.get(build_api_call(BASEURL, None, 'listorders', query_string), auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
             return r.json()
@@ -61,7 +61,7 @@ class Orders:
         if counter_account_id is not None:
             data['counter_account_id'] = counter_account_id
 
-        r = requests.post(build_api_call(self.base_url, None, 'postorder', ''),
+        r = requests.post(build_api_call(BASEURL, None, 'postorder', ''),
                           data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
@@ -102,7 +102,7 @@ class Orders:
         if counter_account_id is not None:
             data['counter_account_id'] = counter_account_id
 
-        r = requests.post(build_api_call(self.base_url, None, 'marketorder', ''),
+        r = requests.post(build_api_call(BASEURL, None, 'marketorder', ''),
                           data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
@@ -122,7 +122,7 @@ class Orders:
             'order_id':order_id
         }
 
-        r = requests.post(build_api_call(self.base_url, None, 'stoporder', ''),
+        r = requests.post(build_api_call(BASEURL, None, 'stoporder', ''),
                           data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
@@ -142,7 +142,7 @@ class Orders:
             'order_id': order_id
         }
 
-        r = requests.post(build_api_call(self.base_url, None, 'orders', ''),
+        r = requests.post(build_api_call(BASEURL, None, 'orders', ''),
                           data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
