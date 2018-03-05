@@ -35,6 +35,7 @@ class Orders:
     def post_limit_order(self, pair, type, volume, price, base_account_id=None, counter_account_id=None):
         """
         Create a new trade order.
+        
         Warning! Orders cannot be reversed once they have executed. Please ensure your program has been thoroughly tested before submitting orders.
         If no base_account_id or counter_account_id are specified, your default base currency or counter currency account will be used. You can find your account IDs by calling the Balances API.
         """
@@ -52,22 +53,28 @@ class Orders:
 
         data = {
             'type': type,
-            'volumne': volume,
-            'price': price
+            'volume': volume,
+            'price': price,
+            'pair':pair
         }
+        print(data)
 
         if base_account_id is not None:
             data['base_account_id'] = base_account_id
         if counter_account_id is not None:
             data['counter_account_id'] = counter_account_id
 
-        r = requests.post(build_api_call(BASEURL, None, 'postorder', ''),
-                          data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
+        url = build_api_call(BASEURL, None, 'postorder', None)
+        print(url)
+        print(self.KEY)
+        print(self.SECRET)
+
+        r = requests.post(url, data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
             return r.json()
         else:
-            return 'error'
+            return {'error': r.text}
 
     def post_market_order(self, type, counter, base_volume, base_account_id=None, counter_account_id=None):
         """
@@ -102,8 +109,8 @@ class Orders:
         if counter_account_id is not None:
             data['counter_account_id'] = counter_account_id
 
-        r = requests.post(build_api_call(BASEURL, None, 'marketorder', ''),
-                          data=data, auth=HTTPBasicAuth(self.KEY, self.SECRET))
+        r = requests.post(build_api_call(BASEURL, None, 'marketorder', None),
+                          data=json.dumps(data), auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
             return r.json()

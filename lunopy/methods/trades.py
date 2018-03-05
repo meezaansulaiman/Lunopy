@@ -25,14 +25,21 @@ class Trades:
         if r.status_code == 200:
             return r.json()
 
-    def get_fee_information(self):
+    def get_fee_information(self, pair='XBTZAR'):
         """
         Fee Information
 
         Returns your fees and 30 day trading volume (as of midnight) for a given pair.
         """
-        url = build_api_call(base_url=self.base_url, account_id=None, method='fee_info', query_string=None)
-        r = requests.get(url)
+        data = {'pair': pair}
+        query_string = build_query_string(data)
+
+        url = build_api_call(
+            base_url=BASEURL,
+            account_id=None,
+            method='fee_info',
+            query_string=query_string)
+        r = requests.get(url, auth=HTTPBasicAuth(self.KEY, self.SECRET))
 
         if r.status_code == 200:
             return r.json()

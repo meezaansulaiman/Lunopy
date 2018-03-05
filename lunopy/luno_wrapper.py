@@ -19,7 +19,6 @@ class Luno:
         self._prices = None
         self._trades = None
         self._transactions = None
-    
 
     def accounts(self):
         if self._accounts is None:
