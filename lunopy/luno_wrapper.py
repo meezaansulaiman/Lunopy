@@ -5,6 +5,7 @@ from .methods import Accounts, Orders, Prices, Trades, Transactions
 # from websocket_client import connect_websocket
 import asyncio
 
+
 class Luno:
 
     def __init__(self, KEY, SECRET, ACCOUNTID):

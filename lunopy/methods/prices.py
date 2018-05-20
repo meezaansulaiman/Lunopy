@@ -9,17 +9,17 @@ import asyncio
 class Prices:
 
     def __init__(self, key, secret, accountid):
-        self.KEY = key
-        self.SECRET = secret
-        self.ACCOUNTID = accountid
+        self.__KEY = key
+        self.__SECRET = secret
+        self.__ACCOUNTID = accountid
 
     def get_ws_price(self, pair='XBTZAR'):
         """
         Gets the prices via websockets
         :param pair: string - eg. XBTZAR
         """
-        return asyncio.get_event_loop()\
-            .run_until_complete(connect_websocket(KEY=self.KEY, SECRET=self.SECRET))
+        return asyncio.get_event_loop() \
+            .run_until_complete(connect_websocket(KEY=self.__KEY, SECRET=self.__SECRET))
 
     def get_price(self, pair='XBTZAR'):
         """
